@@ -92,5 +92,14 @@ internal static class Vocabulary
 
     public static readonly string[] Types = ["text", "integer", "decimal", "date", "datetime", "boolean"];
 
-    public static readonly string[] IssueCodes = ["empty-record"];
+    public static readonly string[] IssueCodes =
+    [
+        "empty-record",
+        "field-count-mismatch",
+        "unterminated-quote",
+        "text-after-closing-quote",
+        "stray-quote",
+        "ambiguous-separator",
+        "invalid-byte",
+    ];
 }

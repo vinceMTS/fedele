@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 namespace Fedele.Museum.Tests;
 
 /// <summary>
-/// Runs on every case of museum/. For now it checks that each case is complete and that
-/// expected.json agrees with the bytes of the input; comparing column types and issues
-/// with Fedele's own result will come with the CSV reader.
+/// Runs on every case of museum/. It checks that each case is complete and that
+/// expected.json agrees with the bytes of the input, independently of Fedele.
+/// FedeleReadingTests compares expected.json with what Fedele itself finds.
 /// </summary>
 public sealed partial class MuseumTests
 {
