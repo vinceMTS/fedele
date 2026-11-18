@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Fedele.Cli/Fedele.Cli.csproj" />
+    <Project Path="src/Fedele.Core/Fedele.Core.csproj" />
+    <Project Path="src/Fedele.Formats.Csv/Fedele.Formats.Csv.csproj" />
+    <Project Path="src/Fedele.Semantics.Italy/Fedele.Semantics.Italy.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Fedele.Cli.Tests/Fedele.Cli.Tests.csproj" />
+    <Project Path="tests/Fedele.Core.Tests/Fedele.Core.Tests.csproj" />
+    <Project Path="tests/Fedele.Formats.Csv.Tests/Fedele.Formats.Csv.Tests.csproj" />
+    <Project Path="tests/Fedele.Museum.Tests/Fedele.Museum.Tests.csproj" />
+    <Project Path="tests/Fedele.Semantics.Italy.Tests/Fedele.Semantics.Italy.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Fedele.Anonymizer/Fedele.Anonymizer.csproj" />
+  </Folder>
+</Solution>

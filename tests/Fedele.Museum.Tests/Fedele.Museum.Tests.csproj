@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Fedele.Core\Fedele.Core.csproj" />
+    <ProjectReference Include="..\..\src\Fedele.Formats.Csv\Fedele.Formats.Csv.csproj" />
+    <ProjectReference Include="..\..\src\Fedele.Semantics.Italy\Fedele.Semantics.Italy.csproj" />
+  </ItemGroup>
+
+</Project>

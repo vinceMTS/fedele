@@ -1,0 +1,8 @@
+# Source files: normalized line endings in the repository.
+* text=auto
+
+# Museum files are test fixtures: git must never touch their line endings,
+# BOM or encoding. They are stored exactly as they are.
+museum/**/input.* -text
+museum/**/*.csv -text
+*.csv -text

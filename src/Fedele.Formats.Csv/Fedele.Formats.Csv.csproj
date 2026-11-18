@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Streaming CSV reader for Fedele: detects encoding, separator and quoting without altering the original values.</Description>
+  </PropertyGroup>
+
+  <!-- Modules depend only on Fedele.Core. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fedele.Core\Fedele.Core.csproj" />
+  </ItemGroup>
+
+</Project>

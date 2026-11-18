@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Fedele.Cli\Fedele.Cli.csproj" />
+  </ItemGroup>
+
+</Project>

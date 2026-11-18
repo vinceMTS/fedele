@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Italian semantic types for Fedele: codice fiscale, partita IVA, IBAN, CAP and provinces.</Description>
+  </PropertyGroup>
+
+  <!-- Modules depend only on Fedele.Core. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fedele.Core\Fedele.Core.csproj" />
+  </ItemGroup>
+
+</Project>

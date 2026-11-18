@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>fedele</AssemblyName>
+    <RootNamespace>Fedele.Cli</RootNamespace>
+    <Description>The fedele command-line tool: inspect, infer, validate and convert data files without betraying their content.</Description>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>fedele</ToolCommandName>
+    <PackageId>Fedele.Cli</PackageId>
+  </PropertyGroup>
+
+  <!-- Applications are the only place where modules are composed. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Fedele.Core\Fedele.Core.csproj" />
+    <ProjectReference Include="..\Fedele.Formats.Csv\Fedele.Formats.Csv.csproj" />
+    <ProjectReference Include="..\Fedele.Semantics.Italy\Fedele.Semantics.Italy.csproj" />
+  </ItemGroup>
+
+</Project>

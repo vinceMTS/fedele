@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Fedele.Core must not reference any other project or external package. -->
+  <PropertyGroup>
+    <Description>Core data model, type inference, issues and extension points for Fedele, the faithful data file reader.</Description>
+  </PropertyGroup>
+
+</Project>
