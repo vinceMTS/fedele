@@ -1,6 +1,6 @@
 # 0006 — Formato di `expected.json` nel museo
 
-- **Stato:** proposta
+- **Stato:** accettata
 - **Data:** 2026-11-18
 
 ## Contesto
