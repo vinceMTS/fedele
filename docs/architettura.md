@@ -61,6 +61,7 @@ Fedele/
 ├── docs/
 │   ├── architettura.md           questo file
 │   ├── stato.md                  diario: dove siamo, prossimo passo
+│   ├── avvio.md                  il kit di avvio originale (documento storico)
 │   └── decisioni/                ADR: una decisione per file
 │
 └── private-data/                 CSV reali, MAI su git, MAI letti da Claude

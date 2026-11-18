@@ -15,7 +15,7 @@
 
 ## Prossimo passo
 
-Creare il repository su GitHub e fare il primo push, per vedere la CI verde su Windows e Linux (prima verificare che i nomi `Fedele.Core` e `fedele` siano liberi su NuGet e GitHub, come in `AVVIO.md`).
+Creare il repository su GitHub e fare il primo push, per vedere la CI verde su Windows e Linux. Nomi verificati il 2026-11-18: `Fedele.Core`, `Fedele.Cli`, `Fedele.Formats.Csv`, `Fedele.Semantics.Italy` e `fedele` sono liberi su NuGet; il repository `fedele` è libero sotto l'account del proprietario.
 
 ## Da fare più avanti
 
@@ -27,9 +27,12 @@ Creare il repository su GitHub e fare il primo push, per vedere la CI verde su W
 
 ## Domande aperte
 
-- `PackageId` del dotnet tool: resta `Fedele.Cli` oppure `fedele`? Da decidere quando si verifica la disponibilità dei nomi su NuGet.
 - Copyright: per ora «The Fedele Authors» in `NOTICE` e nei pacchetti.
-- `AVVIO.md`: tenerlo nella radice, spostarlo in `docs/` o eliminarlo?
+
+## Decisioni prese
+
+- `PackageId` del dotnet tool: resta `Fedele.Cli`, coerente con gli altri pacchetti `Fedele.*`; il comando resta `fedele`.
+- `AVVIO.md` spostato in `docs/avvio.md` come documento storico.
 
 ## Diario
 
