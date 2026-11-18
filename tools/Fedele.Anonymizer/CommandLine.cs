@@ -89,6 +89,7 @@ internal static class CommandLine
     {
         string? columns = null;
         var seed = 1;
+        long? maxRecords = null;
         var hasHeader = true;
         var force = false;
         var positional = new List<string>();
@@ -105,6 +106,14 @@ internal static class CommandLine
                         return Usage(error, "--seed needs an integer.");
                     }
 
+                    break;
+                case "--max-records" when i + 1 < args.Length:
+                    if (!long.TryParse(args[++i], NumberStyles.None, CultureInfo.InvariantCulture, out var max) || max < 1)
+                    {
+                        return Usage(error, "--max-records needs a positive integer.");
+                    }
+
+                    maxRecords = max;
                     break;
                 case "--no-header":
                     hasHeader = false;
@@ -165,19 +174,29 @@ internal static class CommandLine
         using (var input = File.OpenRead(inputPath))
         using (var outputStream = new FileStream(outputPath, force ? FileMode.Create : FileMode.CreateNew, FileAccess.Write))
         {
-            result = FileAnonymizer.Anonymize(input, outputStream, new AnonymizeOptions(selected, seed, hasHeader));
+            result = FileAnonymizer.Anonymize(input, outputStream, new AnonymizeOptions(selected, seed, hasHeader, maxRecords));
         }
 
         output.WriteLine($"Written    : {positional[1]}");
         output.WriteLine($"Encoding   : {result.Encoding.DisplayName}; BOM: {result.Encoding.BomDisplay}");
         output.WriteLine($"Separator  : {result.Separator.Display}");
-        output.WriteLine($"Records    : {result.Records}");
+        output.WriteLine($"Records    : {result.Records}{(maxRecords is null ? string.Empty : $" (limit: {maxRecords} data records)")}");
 
         if (selected.Count == 0)
         {
-            var inputHash = Hash(inputPath);
-            var identical = inputHash == Hash(outputPath);
-            output.WriteLine($"Byte-identical copy: {(identical ? "yes" : "NO")} (SHA-256 {inputHash})");
+            bool identical;
+            if (maxRecords is null)
+            {
+                var inputHash = Hash(inputPath);
+                identical = inputHash == Hash(outputPath);
+                output.WriteLine($"Byte-identical copy: {(identical ? "yes" : "NO")} (SHA-256 {inputHash})");
+            }
+            else
+            {
+                identical = IsPrefix(outputPath, inputPath);
+                output.WriteLine($"Byte-identical prefix of the input: {(identical ? "yes" : "NO")} ({new FileInfo(outputPath).Length} bytes)");
+            }
+
             if (!identical)
             {
                 error.WriteLine("The copy differs from the input. This is a bug in Fedele.Anonymizer: do not use the output.");
@@ -258,6 +277,30 @@ internal static class CommandLine
         return Convert.ToHexStringLower(SHA256.HashData(stream));
     }
 
+    private static bool IsPrefix(string prefixPath, string fullPath)
+    {
+        using var prefix = File.OpenRead(prefixPath);
+        using var full = File.OpenRead(fullPath);
+        if (prefix.Length > full.Length)
+        {
+            return false;
+        }
+
+        var left = new byte[64 * 1024];
+        var right = new byte[left.Length];
+        int read;
+        while ((read = prefix.ReadAtLeast(left, left.Length, throwOnEndOfStream: false)) > 0)
+        {
+            full.ReadExactly(right, 0, read);
+            if (!left.AsSpan(0, read).SequenceEqual(right.AsSpan(0, read)))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static int Usage(TextWriter error, string message)
     {
         error.WriteLine(message);
@@ -275,9 +318,10 @@ internal static class CommandLine
         writer.WriteLine("      Prints only the structure: encoding, BOM, line endings, separator, quoting,");
         writer.WriteLine("      records, header names and the probable type of each column. Never values.");
         writer.WriteLine();
-        writer.WriteLine("  anonymize <input> <output> --columns <list|none> [--seed <n>] [--no-header] [--force]");
+        writer.WriteLine("  anonymize <input> <output> --columns <list|none> [--seed <n>] [--max-records <n>] [--no-header] [--force]");
         writer.WriteLine("      Replaces the values of the listed columns (1-based numbers or header names,");
         writer.WriteLine("      comma-separated) with fake values of the same shape. Every other byte is");
         writer.WriteLine("      copied unchanged. --columns none makes a verified byte-identical copy.");
+        writer.WriteLine("      --max-records keeps the header and the first <n> data records, with their line ending.");
     }
 }

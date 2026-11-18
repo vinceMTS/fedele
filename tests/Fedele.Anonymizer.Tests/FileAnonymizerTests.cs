@@ -88,6 +88,43 @@ public sealed class FileAnonymizerTests
         Assert.Equal((ValueKind.DateTime, "n.n.nn n:nn"), (shortDate.Kind, shortDate.Pattern));
     }
 
+    [Theory]
+    [InlineData("h\r\n1\r\n2\r\n3\r\n", 2, true, "h\r\n1\r\n2\r\n")]
+    [InlineData("h\n1\n\n2\n", 1, true, "h\n1\n")]
+    [InlineData("h\r1\r2\r", 1, true, "h\r1\r")]
+    [InlineData("h\r\n1\r\n\r\n2", 1, true, "h\r\n1\r\n")]
+    [InlineData("h\n\"a\nb\"\n2\n", 1, true, "h\n\"a\nb\"\n")]
+    [InlineData("h\n1\n2", 5, true, "h\n1\n2")]
+    [InlineData("1\n2\n3\n", 2, false, "1\n2\n")]
+    [InlineData("a,b\n,\n1,2\n3,4\n", 2, true, "a,b\n,\n1,2\n")]
+    public void Anonymize_MaxRecords_KeepsExactPrefix(string input, long maxRecords, bool hasHeader, string expected)
+    {
+        var output = TestFiles.Anonymize(TestFiles.Utf8(input), [], hasHeader: hasHeader, maxRecords: maxRecords);
+
+        Assert.Equal(TestFiles.Utf8(expected), output);
+    }
+
+    [Fact]
+    public void Anonymize_RecordOfEmptyFields_IsCountedLikeAnalyze()
+    {
+        var input = TestFiles.Utf8("a,b\n1,2\n,\n\n3,4\n");
+
+        using var inputStream = new MemoryStream(input);
+        var result = FileAnonymizer.Anonymize(inputStream, new MemoryStream(), new AnonymizeOptions(new HashSet<int>(), 1, true));
+
+        Assert.Equal(TestFiles.Analyze(input).Records, result.Records);
+    }
+
+    [Fact]
+    public void Anonymize_MaxRecordsUtf16_KeepsExactPrefix()
+    {
+        var input = TestFiles.Utf16("Nome;Età\r\nAnna;30\r\nLuca;40\r\n", bigEndian: false);
+
+        var output = TestFiles.Anonymize(input, [], maxRecords: 1);
+
+        Assert.Equal(TestFiles.Utf16("Nome;Età\r\nAnna;30\r\n", bigEndian: false), output);
+    }
+
     [Fact]
     public void Anonymize_Windows1252_KeepsOtherColumnsByteIdentical()
     {

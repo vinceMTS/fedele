@@ -46,6 +46,32 @@ public sealed class CommandLineTests : IDisposable
     }
 
     [Fact]
+    public void Anonymize_MaxRecords_WritesVerifiedPrefix()
+    {
+        var input = WriteInput("a,b\r\n1,2\r\n3,4\r\n5,6\r\n");
+        var output = Path.Combine(_directory, "out.csv");
+
+        var (exitCode, text, _) = Run("anonymize", input, output, "--columns", "none", "--max-records", "2");
+
+        Assert.Equal(0, exitCode);
+        Assert.Contains("Byte-identical prefix of the input: yes", text);
+        Assert.Equal(TestFiles.Utf8("a,b\r\n1,2\r\n3,4\r\n"), File.ReadAllBytes(output));
+    }
+
+    [Theory]
+    [InlineData("0")]
+    [InlineData("-3")]
+    [InlineData("tanti")]
+    public void Anonymize_InvalidMaxRecords_IsRefused(string value)
+    {
+        var input = WriteInput("a,b\r\n1,2\r\n");
+
+        var (exitCode, _, _) = Run("anonymize", input, Path.Combine(_directory, "out.csv"), "--columns", "none", "--max-records", value);
+
+        Assert.Equal(1, exitCode);
+    }
+
+    [Fact]
     public void Anonymize_ExistingOutput_IsNotOverwritten()
     {
         var input = WriteInput("a;b\n1;2\n");

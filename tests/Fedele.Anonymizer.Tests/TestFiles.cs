@@ -61,11 +61,11 @@ internal static class TestFiles
         return writer.ToString();
     }
 
-    public static byte[] Anonymize(byte[] bytes, int[] columns, int seed = 1, bool hasHeader = true)
+    public static byte[] Anonymize(byte[] bytes, int[] columns, int seed = 1, bool hasHeader = true, long? maxRecords = null)
     {
         using var input = new MemoryStream(bytes);
         using var output = new MemoryStream();
-        FileAnonymizer.Anonymize(input, output, new AnonymizeOptions(columns.ToHashSet(), seed, hasHeader));
+        FileAnonymizer.Anonymize(input, output, new AnonymizeOptions(columns.ToHashSet(), seed, hasHeader, maxRecords));
         return output.ToArray();
     }
 

@@ -3,8 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace Fedele.Anonymizer;
 
-/// <summary>Options for <see cref="FileAnonymizer"/>. Columns are 0-based.</summary>
-internal sealed record AnonymizeOptions(IReadOnlySet<int> Columns, int Seed, bool HasHeader);
+/// <summary>
+/// Options for <see cref="FileAnonymizer"/>. Columns are 0-based. When <paramref name="MaxDataRecords"/>
+/// is set, the output stops after that many data records (header excluded) and their line ending.
+/// </summary>
+internal sealed record AnonymizeOptions(IReadOnlySet<int> Columns, int Seed, bool HasHeader, long? MaxDataRecords = null);
 
 /// <summary>What <see cref="FileAnonymizer"/> did. Replaced counts are per 0-based column.</summary>
 internal sealed record AnonymizeResult(
@@ -35,15 +38,18 @@ internal static class FileAnonymizer
         var sink = new RewriteSink(buffered, encoding, options);
         var lexer = new CsvLexer(separator.Unit, CsvSniffer.Quote, sink);
         int unit;
-        while ((unit = reader.Read()) >= 0)
+        while (!sink.Stopped && (unit = reader.Read()) >= 0)
         {
             lexer.Feed(unit);
         }
 
-        lexer.Complete();
-        if (reader.TrailingByte is { } trailing)
+        if (!sink.Stopped)
         {
-            buffered.WriteByte((byte)trailing);
+            lexer.Complete();
+            if (reader.TrailingByte is { } trailing)
+            {
+                buffered.WriteByte((byte)trailing);
+            }
         }
 
         buffered.Flush();
@@ -58,17 +64,32 @@ internal static class FileAnonymizer
         private bool _headerPending = options.HasHeader;
         private bool _recordHasContent;
         private int _column;
+        private long _dataRecords;
+        private bool _limitReached;
+        private bool _sawCrAfterLimit;
 
         public long Records { get; private set; }
 
         public Dictionary<int, long> Replaced { get; } = [];
 
+        /// <summary>True once the record limit and its line ending have been written.</summary>
+        public bool Stopped { get; private set; }
+
         private bool ReplacesCurrentField => !_headerPending && options.Columns.Contains(_column);
 
         public void OnUnit(int unit, UnitRole role)
         {
+            if (_limitReached)
+            {
+                WriteFinalLineEnd(unit, role);
+                return;
+            }
+
             var isFieldUnit = role is UnitRole.Content or UnitRole.Quote;
-            _recordHasContent |= isFieldUnit;
+
+            // A record with a separator is a real record even when all its fields are empty (",,,,"),
+            // exactly as analyze counts it; only a truly empty line is not.
+            _recordHasContent |= isFieldUnit || role == UnitRole.Separator;
             if (isFieldUnit && ReplacesCurrentField)
             {
                 _field.Add((unit, role));
@@ -93,11 +114,37 @@ internal static class FileAnonymizer
             if (_recordHasContent)
             {
                 Records++;
+                _dataRecords += _headerPending ? 0 : 1;
                 _headerPending = false;
+                _limitReached = _dataRecords == options.MaxDataRecords;
             }
 
             _recordHasContent = false;
             _column = 0;
+        }
+
+        // After the last kept record, only its own line ending (CR, LF or CRLF) is written.
+        private void WriteFinalLineEnd(int unit, UnitRole role)
+        {
+            if (Stopped || role != UnitRole.LineEnd)
+            {
+                Stopped = true;
+                return;
+            }
+
+            if (unit == '\r' && !_sawCrAfterLimit)
+            {
+                _sawCrAfterLimit = true;
+                UnitCodec.Write(unit, encoding, output);
+                return;
+            }
+
+            if (unit == '\n')
+            {
+                UnitCodec.Write(unit, encoding, output);
+            }
+
+            Stopped = true;
         }
 
         // Quotes are written as they are; each run of content between them is scrambled.
