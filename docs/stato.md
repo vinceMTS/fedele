@@ -2,24 +2,24 @@
 
 ## Dove siamo
 
-- **Fase 1 — Il lettore onesto**, fine della settimana 1: struttura, anonimizzatore, primi tre casi del museo e test che li scoprono da soli sono pronti; build e 122 test verdi in locale. Manca solo la verifica della CI su GitHub.
+- **Fase 1 — Il lettore onesto**, fine della settimana 1: struttura, anonimizzatore, primi tre casi del museo e test che li scoprono da soli sono pronti; build e 122 test verdi in locale e nella CI di GitHub Actions (Windows e Linux). Settimana 1 completata.
+- **Repository pubblico**: https://github.com/vinceMTS/fedele
 - **Primi utenti da coinvolgere**: software house e sviluppatori di gestionali .NET in Italia.
 
 ## Settimana 1 — obiettivi
 
 - [x] Struttura del repository e soluzione .NET 10 secondo `docs/architettura.md`
-- [ ] Build e test verdi in locale e su GitHub Actions (in locale sì; su GitHub Actions da verificare al primo push)
+- [x] Build e test verdi in locale e su GitHub Actions (Windows e Linux, primo push del 2026-11-18)
 - [x] `tools/Fedele.Anonymizer`, prima versione: il proprietario indica le colonne da anonimizzare; i valori vengono sostituiti preservando encoding, BOM, separatore, virgolette e fine riga (comandi `analyze` e `anonymize`; i caratteri di controllo di codice fiscale, partita IVA e IBAN non sono ancora ricalcolati)
 - [x] Primi casi nel museo degli orrori, da `private-data/`, anonimizzati e approvati (0001–0003; dati sintetici, copiati identici)
 - [x] `Fedele.Museum.Tests` che scopre i casi da solo (controlla completezza dei casi, `expected.json` secondo ADR 0006, encoding, BOM, fine riga, record e intestazione; il confronto di tipi e problemi arriverà con il lettore CSV)
 
 ## Prossimo passo
 
-Creare il repository su GitHub e fare il primo push, per vedere la CI verde su Windows e Linux. Nomi verificati il 2026-11-18: `Fedele.Core`, `Fedele.Cli`, `Fedele.Formats.Csv`, `Fedele.Semantics.Italy` e `fedele` sono liberi su NuGet; il repository `fedele` è libero sotto l'account del proprietario.
+Settimana 2: progettare l'API di `Fedele.Core` (`IFormatReader`, `RawRecord`, `Issue`) e il lettore di `Fedele.Formats.Csv`. Prima mostrare il piano al proprietario. (Nomi verificati il 2026-11-18: `Fedele.Core`, `Fedele.Cli`, `Fedele.Formats.Csv`, `Fedele.Semantics.Italy` e `fedele` sono liberi su NuGet.)
 
 ## Da fare più avanti
 
-- Settimana 2: progettare l'API di `Fedele.Core` (`IFormatReader`, `RawRecord`, `Issue`) e il lettore di `Fedele.Formats.Csv`.
 - Spostare rilevamento di encoding/separatore e classificazione dei valori da `tools/Fedele.Anonymizer` a `Fedele.Formats.Csv` e `Fedele.Semantics.Italy`, quando si progettano le loro API.
 - Ricalcolare i caratteri di controllo (codice fiscale, partita IVA, IBAN) nei valori anonimizzati, tramite `GenerateSample` dei tipi semantici.
 - `analyze` su una cartella analizza anche i file non CSV (README, JSON): filtrarli o segnalarli.
