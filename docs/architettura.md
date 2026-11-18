@@ -136,4 +136,4 @@ Ogni tipo semantico sa anche **generare valori finti ma validi** (codici fiscali
 
 ## Il museo degli orrori
 
-Ogni caso in `museum/` è una cartella con un file di input, il risultato atteso (`expected.json`: encoding, separatore, intestazione, tipo di ogni colonna, problemi attesi) e un `README.md` che spiega cosa lo rende difficile. `Fedele.Museum.Tests` scopre i casi da solo: aggiungere un caso non richiede di scrivere codice di test.
+Ogni caso in `museum/` è una cartella con un file di input, il risultato atteso (`expected.json`: encoding, separatore, intestazione, tipo di ogni colonna, problemi attesi) e un `README.md` che spiega cosa lo rende difficile. `Fedele.Museum.Tests` scopre i casi da solo: aggiungere un caso non richiede di scrivere codice di test. Il formato di `expected.json` è fissato dall'ADR 0006.

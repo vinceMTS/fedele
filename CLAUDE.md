@@ -1,5 +1,7 @@
 # Fedele — istruzioni per Claude Code
 
+> **Regola fissa: con il proprietario si parla sempre in italiano**, in ogni messaggio, riepilogo, domanda e spiegazione, per tutta la sessione, anche quando i file, i log o gli strumenti sono in inglese. In inglese restano solo codice, nomi, commenti nel codice e messaggi di commit.
+
 Fedele è una libreria .NET open source (Apache-2.0) che legge file di dati — CSV oggi, poi Excel, JSON, XML — **senza mai tradirne il contenuto**: nessuno zero perso, nessuna data inventata, nessun decimale sbagliato. Parla nativamente i formati italiani ed europei.
 
 Il progetto è pensato per crescere a strati: libreria (`Fedele.*` su NuGet) → strumento a riga di comando (`fedele`) → prodotto (importatore web). Ogni scelta di struttura deve tenerne conto.

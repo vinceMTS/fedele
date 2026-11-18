@@ -2,7 +2,7 @@
 
 ## Dove siamo
 
-- **Fase 1 — Il lettore onesto**, settimana 1: repository inizializzato, build e test verdi in locale.
+- **Fase 1 — Il lettore onesto**, fine della settimana 1: struttura, anonimizzatore, primi tre casi del museo e test che li scoprono da soli sono pronti; build e 122 test verdi in locale. Manca solo la verifica della CI su GitHub.
 - **Primi utenti da coinvolgere**: software house e sviluppatori di gestionali .NET in Italia.
 
 ## Settimana 1 — obiettivi
@@ -15,24 +15,25 @@
 
 ## Prossimo passo
 
-Primo push su GitHub (quando il proprietario lo chiede) per verificare la CI su Windows e Linux; poi iniziare la settimana 2 progettando l'API di `Fedele.Core` (`IFormatReader`, `RawRecord`, `Issue`) e il lettore di `Fedele.Formats.Csv`, spostandovi la logica di rilevamento oggi interna all'anonimizzatore.
+Creare il repository su GitHub e fare il primo push, per vedere la CI verde su Windows e Linux (prima verificare che i nomi `Fedele.Core` e `fedele` siano liberi su NuGet e GitHub, come in `AVVIO.md`).
 
 ## Da fare più avanti
 
+- Settimana 2: progettare l'API di `Fedele.Core` (`IFormatReader`, `RawRecord`, `Issue`) e il lettore di `Fedele.Formats.Csv`.
 - Spostare rilevamento di encoding/separatore e classificazione dei valori da `tools/Fedele.Anonymizer` a `Fedele.Formats.Csv` e `Fedele.Semantics.Italy`, quando si progettano le loro API.
 - Ricalcolare i caratteri di controllo (codice fiscale, partita IVA, IBAN) nei valori anonimizzati, tramite `GenerateSample` dei tipi semantici.
+- `analyze` su una cartella analizza anche i file non CSV (README, JSON): filtrarli o segnalarli.
+- Il file intero `dataset_1000000x20.csv` (136 MB, in `private-data/`) è un buon candidato per i benchmark della settimana 5.
 
 ## Domande aperte
 
 - `PackageId` del dotnet tool: resta `Fedele.Cli` oppure `fedele`? Da decidere quando si verifica la disponibilità dei nomi su NuGet.
 - Copyright: per ora «The Fedele Authors» in `NOTICE` e nei pacchetti.
+- `AVVIO.md`: tenerlo nella radice, spostarlo in `docs/` o eliminarlo?
 
 ## Diario
 
 Una riga per sessione, la più recente in alto: data, cosa è stato fatto, cosa resta.
 
-- 2026-11-18 — `Fedele.Museum.Tests` scopre i casi da solo e verifica `expected.json` contro i byte dei file (ADR 0006 accettato). Resta: CI su GitHub, poi l'API di `Fedele.Core` e il lettore CSV.
-- 2026-11-18 — Primi tre casi nel museo (riga di campi vuoti e decimali col punto; solo interi; telefoni che sembrano numeri), con `expected.json` e README. Aggiunto `--max-records` all'anonimizzatore (il file da 136 MB supera il limite di GitHub). Proposto ADR 0006. Resta: scoperta automatica dei casi in `Fedele.Museum.Tests`.
-- 2026-11-18 — Anonimizzatore, prima versione: `analyze` (solo struttura, mai valori) e `anonymize` (stessa forma, copia identica verificata con `--columns none`), 86 nuovi test in `Fedele.Anonymizer.Tests`. Resta: portare i file di `private-data/` nel museo.
-- 2026-11-18 — Repository inizializzato: soluzione `.slnx`, 4 progetti in `src/`, 5 progetti di test con test di architettura, scheletro dell'anonimizzatore, CI Windows + Linux, LICENSE, NOTICE, README, ADR 0005 (xUnit v3). Resta: anonimizzatore, primi casi del museo, CI da verificare su GitHub.
+- 2026-11-18 — Prima sessione di lavoro: repository inizializzato (soluzione `.slnx`, progetti, test di architettura, CI, LICENSE, NOTICE, README, ADR 0005); anonimizzatore con `analyze`, `anonymize` e `--max-records`; primi tre casi nel museo (riga di campi vuoti e decimali col punto; solo interi; telefoni che sembrano numeri); `Fedele.Museum.Tests` che scopre i casi da solo (ADR 0006); regola dell'italiano resa esplicita in `CLAUDE.md`. Resta: CI su GitHub, poi la settimana 2.
 - 2026-11-18 — Progetto pianificato, kit di avvio pronto.
