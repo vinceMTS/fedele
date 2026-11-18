@@ -92,7 +92,7 @@ Ogni `Directory.Build.props` di cartella importa quello della radice e aggiunge 
 
 ## Punti di estensione (in `Fedele.Core`)
 
-Lo schizzo qui sotto è un punto di partenza: i dettagli si raffinano scrivendo il codice, ma il principio resta. Ogni modulo aggiunge capacità implementando un'interfaccia di `Core` e registrandosi con un metodo di estensione.
+Ogni modulo aggiunge capacità implementando un'interfaccia di `Core` e registrandosi con un metodo di estensione. La lettura è in due passi, prima si apre e poi si legge (ADR 0007); `ISemanticType` è ancora uno schizzo e si definirà con l'inferenza dei tipi.
 
 ```csharp
 namespace Fedele.Core;
@@ -102,7 +102,17 @@ public interface IFormatReader
 {
     string FormatId { get; }                                   // "csv"
     FormatDetection Detect(ReadOnlySpan<byte> sample);         // quanto è probabile che sia questo formato
-    IAsyncEnumerable<RawRecord> ReadAsync(Stream input, ReadOptions options, CancellationToken ct = default);
+    ValueTask<IRecordReader> OpenAsync(Stream input, ReadOptions? options = null, CancellationToken ct = default);
+}
+
+/// Un file aperto: layout dedotto subito, record in streaming, problemi e riepilogo.
+public interface IRecordReader : IAsyncDisposable
+{
+    FormatLayout Layout { get; }                               // encoding, separatore... con confidenza e motivo
+    IAsyncEnumerable<RawRecord> ReadRecordsAsync(CancellationToken ct = default);
+    IReadOnlyList<Issue> Issues { get; }
+    long DroppedIssueCount { get; }
+    ReadSummary? Summary { get; }                              // a fine lettura
 }
 
 /// Riconosce e valida un tipo di dato con un significato (codice fiscale, IBAN, ...).
@@ -116,9 +126,11 @@ public interface ISemanticType
 /// Punto di composizione: le applicazioni scelgono i moduli.
 var fedele = new FedeleBuilder()
     .AddCsv()                  // da Fedele.Formats.Csv
-    .AddItalianSemantics()     // da Fedele.Semantics.Italy
+    .AddItalianSemantics()     // da Fedele.Semantics.Italy (futuro)
     .Build();
 ```
+
+Il riconoscimento dell'encoding dei file di testo (`TextEncodingDetector`) sta in `Core`, perché serve a tutti i formati di testo (CSV oggi, JSON e XML domani).
 
 Ogni tipo semantico sa anche **generare valori finti ma validi** (codici fiscali con il carattere di controllo giusto, IBAN con il modulo 97 corretto). È ciò che permette all'anonimizzatore di sostituire i dati reali senza distruggere le caratteristiche che rendono interessante un file.
 
@@ -127,7 +139,7 @@ Ogni tipo semantico sa anche **generare valori finti ma validi** (codici fiscali
 - `analyze <file|cartella>` stampa solo la struttura: encoding, BOM, fine riga, separatore, virgolette, record, nomi delle colonne (solo se la prima riga sembra un'intestazione) e il tipo probabile di ogni colonna, dedotto dalla forma. Mai i valori.
 - `anonymize <input> <output> --columns <elenco|none>` sostituisce i valori delle colonne scelte con valori finti della stessa forma; tutti gli altri byte sono copiati identici. `--columns none` produce una copia identica verificata con SHA-256.
 - Legge il file come sequenza di "unità" (byte per UTF-8 e Windows-1252, coppie di byte per UTF-16) che si riconvertono esattamente nei byte originali: è ciò che garantisce la copia fedele.
-- Il riconoscimento di encoding e separatore e la classificazione dei valori sono per ora **interni allo strumento**. Quando progetteremo `Fedele.Formats.Csv` e `Fedele.Semantics.Italy`, quella logica si sposterà lì e lo strumento la userà dai moduli.
+- Il riconoscimento di encoding e separatore e la classificazione dei valori sono per ora **interni allo strumento**. Encoding e separatore esistono ormai anche in `Fedele.Core` e `Fedele.Formats.Csv`: nella settimana 3 lo strumento userà quelli dei moduli, insieme alla classificazione spostata in `Fedele.Semantics.Italy`.
 
 ## Pacchetti e distribuzione
 
