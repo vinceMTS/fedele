@@ -1,0 +1,39 @@
+{
+  "description": "Twenty-one integer columns whose values grow from 4 to 8 digits along the file.",
+  "source": { "kind": "full-copy" },
+  "file": {
+    "encoding": "ascii",
+    "bom": false,
+    "lineEnding": "crlf",
+    "finalLineEnding": true,
+    "separator": ",",
+    "quote": "\"",
+    "header": true,
+    "records": 10000,
+    "fieldsPerRecord": 21
+  },
+  "columns": [
+    { "name": "ID", "type": "integer" },
+    { "name": "C1", "type": "integer" },
+    { "name": "C2", "type": "integer" },
+    { "name": "C3", "type": "integer" },
+    { "name": "C4", "type": "integer" },
+    { "name": "C5", "type": "integer" },
+    { "name": "C6", "type": "integer" },
+    { "name": "C7", "type": "integer" },
+    { "name": "C8", "type": "integer" },
+    { "name": "C9", "type": "integer" },
+    { "name": "C10", "type": "integer" },
+    { "name": "C11", "type": "integer" },
+    { "name": "C12", "type": "integer" },
+    { "name": "C13", "type": "integer" },
+    { "name": "C14", "type": "integer" },
+    { "name": "C15", "type": "integer" },
+    { "name": "C16", "type": "integer" },
+    { "name": "C17", "type": "integer" },
+    { "name": "C18", "type": "integer" },
+    { "name": "C19", "type": "integer" },
+    { "name": "C20", "type": "integer" }
+  ],
+  "issues": []
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Italian names with English-style decimals of varying precision, and a last record made only of separators.",
+  "source": { "kind": "full-copy" },
+  "file": {
+    "encoding": "ascii",
+    "bom": false,
+    "lineEnding": "crlf",
+    "finalLineEnding": true,
+    "separator": ",",
+    "quote": "\"",
+    "header": true,
+    "records": 10001,
+    "fieldsPerRecord": 5
+  },
+  "columns": [
+    { "name": "ID", "type": "integer" },
+    { "name": "Nome", "type": "text" },
+    { "name": "Eta", "type": "integer" },
+    { "name": "Punteggio", "type": "decimal", "decimalSeparator": ".", "thousandsSeparator": null },
+    { "name": "Data", "type": "date", "format": "yyyy-MM-dd" }
+  ],
+  "issues": [
+    { "code": "empty-record", "record": 10002, "column": null }
+  ]
+}

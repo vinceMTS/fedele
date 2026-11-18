@@ -10,12 +10,12 @@
 - [x] Struttura del repository e soluzione .NET 10 secondo `docs/architettura.md`
 - [ ] Build e test verdi in locale e su GitHub Actions (in locale sì; su GitHub Actions da verificare al primo push)
 - [x] `tools/Fedele.Anonymizer`, prima versione: il proprietario indica le colonne da anonimizzare; i valori vengono sostituiti preservando encoding, BOM, separatore, virgolette e fine riga (comandi `analyze` e `anonymize`; i caratteri di controllo di codice fiscale, partita IVA e IBAN non sono ancora ricalcolati)
-- [ ] Primi casi nel museo degli orrori, da `private-data/`, anonimizzati e approvati
+- [x] Primi casi nel museo degli orrori, da `private-data/`, anonimizzati e approvati (0001–0003; dati sintetici, copiati identici)
 - [ ] `Fedele.Museum.Tests` che scopre i casi da solo (per ora verifica solo che `museum/` esista)
 
 ## Prossimo passo
 
-Fase 2 di `/aggiungi-al-museo`: eseguire `analyze private-data/`, mostrare il riepilogo al proprietario e, con la sua conferma (nessuna colonna da anonimizzare), copiare i file nel museo con `anonymize --columns none`.
+`Fedele.Museum.Tests` che scopre i casi da solo: per ogni cartella di `museum/` legge `expected.json` (formato ADR 0006), controlla che il caso sia completo e verifica subito i fatti leggibili dai byte (encoding, BOM, fine riga, ultima riga terminata). Il confronto di colonne e problemi arriverà con il lettore CSV.
 
 ## Da fare più avanti
 
@@ -24,6 +24,7 @@ Fase 2 di `/aggiungi-al-museo`: eseguire `analyze private-data/`, mostrare il ri
 
 ## Domande aperte
 
+- ADR 0006 (formato di `expected.json`) è in stato «proposta»: da accettare o correggere prima di scrivere `Fedele.Museum.Tests`.
 - `PackageId` del dotnet tool: resta `Fedele.Cli` oppure `fedele`? Da decidere quando si verifica la disponibilità dei nomi su NuGet.
 - Copyright: per ora «The Fedele Authors» in `NOTICE` e nei pacchetti.
 
@@ -31,6 +32,7 @@ Fase 2 di `/aggiungi-al-museo`: eseguire `analyze private-data/`, mostrare il ri
 
 Una riga per sessione, la più recente in alto: data, cosa è stato fatto, cosa resta.
 
+- 2026-11-18 — Primi tre casi nel museo (riga di campi vuoti e decimali col punto; solo interi; telefoni che sembrano numeri), con `expected.json` e README. Aggiunto `--max-records` all'anonimizzatore (il file da 136 MB supera il limite di GitHub). Proposto ADR 0006. Resta: scoperta automatica dei casi in `Fedele.Museum.Tests`.
 - 2026-11-18 — Anonimizzatore, prima versione: `analyze` (solo struttura, mai valori) e `anonymize` (stessa forma, copia identica verificata con `--columns none`), 86 nuovi test in `Fedele.Anonymizer.Tests`. Resta: portare i file di `private-data/` nel museo.
 - 2026-11-18 — Repository inizializzato: soluzione `.slnx`, 4 progetti in `src/`, 5 progetti di test con test di architettura, scheletro dell'anonimizzatore, CI Windows + Linux, LICENSE, NOTICE, README, ADR 0005 (xUnit v3). Resta: anonimizzatore, primi casi del museo, CI da verificare su GitHub.
 - 2026-11-18 — Progetto pianificato, kit di avvio pronto.

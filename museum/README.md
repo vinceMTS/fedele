@@ -12,6 +12,7 @@ museum/
 └── 0001-<short-name>/
     ├── input.csv       the anonymized file, stored byte for byte (see .gitattributes)
     ├── expected.json   what Fedele must detect: encoding, separator, header, column types, issues
+    │                   (format: docs/decisioni/0006-formato-expected-json.md)
     └── README.md       what makes this file hard
 ```
 

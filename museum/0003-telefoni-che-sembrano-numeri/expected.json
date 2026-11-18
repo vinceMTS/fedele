@@ -1,0 +1,38 @@
+{
+  "description": "Personnel register where phone numbers look like 10-digit integers and IDs carry leading zeros after a prefix.",
+  "source": { "kind": "prefix", "note": "Header and first 10000 data records of a 136 MB file with 784988 data records." },
+  "file": {
+    "encoding": "ascii",
+    "bom": false,
+    "lineEnding": "crlf",
+    "finalLineEnding": true,
+    "separator": ",",
+    "quote": "\"",
+    "header": true,
+    "records": 10000,
+    "fieldsPerRecord": 20
+  },
+  "columns": [
+    { "name": "ID", "type": "text" },
+    { "name": "Nome", "type": "text" },
+    { "name": "Cognome", "type": "text" },
+    { "name": "Eta", "type": "integer" },
+    { "name": "DataNascita", "type": "date", "format": "yyyy-MM-dd" },
+    { "name": "Citta", "type": "text" },
+    { "name": "Regione", "type": "text" },
+    { "name": "Professione", "type": "text" },
+    { "name": "Reparto", "type": "text" },
+    { "name": "Livello", "type": "text" },
+    { "name": "Stato", "type": "text" },
+    { "name": "Priorita", "type": "text" },
+    { "name": "DataAssunzione", "type": "date", "format": "yyyy-MM-dd" },
+    { "name": "Progetto", "type": "text" },
+    { "name": "Email", "type": "text", "semantic": "email" },
+    { "name": "Telefono", "type": "text", "semantic": "phone" },
+    { "name": "Azienda", "type": "text" },
+    { "name": "UltimoAccesso", "type": "date", "format": "yyyy-MM-dd" },
+    { "name": "Categoria", "type": "text" },
+    { "name": "Note", "type": "text" }
+  ],
+  "issues": []
+}
