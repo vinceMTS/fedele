@@ -10,6 +10,10 @@
     <PackageId>Fedele.Cli</PackageId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Fedele.Cli.Tests" />
+  </ItemGroup>
+
   <!-- Applications are the only place where modules are composed. -->
   <ItemGroup>
     <ProjectReference Include="..\Fedele.Core\Fedele.Core.csproj" />

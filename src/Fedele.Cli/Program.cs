@@ -1,9 +1,10 @@
-using System.Reflection;
+using Fedele.Cli;
 
-var version = typeof(Program).Assembly
-    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-    .InformationalVersion ?? "unknown";
+using var cancellation = new CancellationTokenSource();
+Console.CancelKeyPress += (_, e) =>
+{
+    e.Cancel = true;
+    cancellation.Cancel();
+};
 
-Console.WriteLine($"fedele {version}");
-Console.WriteLine("Commands (coming soon): inspect, infer, validate, convert");
-return 0;
+return await CommandLine.RunAsync(args, Console.Out, Console.Error, cancellation.Token);
