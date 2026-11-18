@@ -42,6 +42,7 @@ Fedele/
 │   ├── Fedele.Formats.Csv.Tests/
 │   ├── Fedele.Semantics.Italy.Tests/
 │   ├── Fedele.Cli.Tests/
+│   ├── Fedele.Anonymizer.Tests/  test dello strumento: copia identica byte per byte, forma dei valori, privacy
 │   └── Fedele.Museum.Tests/      esegue Fedele su ogni caso del museo e confronta con il risultato atteso
 │
 ├── museum/                       il museo degli orrori: file anonimizzati
@@ -119,6 +120,13 @@ var fedele = new FedeleBuilder()
 ```
 
 Ogni tipo semantico sa anche **generare valori finti ma validi** (codici fiscali con il carattere di controllo giusto, IBAN con il modulo 97 corretto). È ciò che permette all'anonimizzatore di sostituire i dati reali senza distruggere le caratteristiche che rendono interessante un file.
+
+## L'anonimizzatore (`tools/Fedele.Anonymizer`)
+
+- `analyze <file|cartella>` stampa solo la struttura: encoding, BOM, fine riga, separatore, virgolette, record, nomi delle colonne (solo se la prima riga sembra un'intestazione) e il tipo probabile di ogni colonna, dedotto dalla forma. Mai i valori.
+- `anonymize <input> <output> --columns <elenco|none>` sostituisce i valori delle colonne scelte con valori finti della stessa forma; tutti gli altri byte sono copiati identici. `--columns none` produce una copia identica verificata con SHA-256.
+- Legge il file come sequenza di "unità" (byte per UTF-8 e Windows-1252, coppie di byte per UTF-16) che si riconvertono esattamente nei byte originali: è ciò che garantisce la copia fedele.
+- Il riconoscimento di encoding e separatore e la classificazione dei valori sono per ora **interni allo strumento**. Quando progetteremo `Fedele.Formats.Csv` e `Fedele.Semantics.Italy`, quella logica si sposterà lì e lo strumento la userà dai moduli.
 
 ## Pacchetti e distribuzione
 

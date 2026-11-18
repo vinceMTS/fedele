@@ -6,6 +6,7 @@
     <Project Path="src/Fedele.Semantics.Italy/Fedele.Semantics.Italy.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Fedele.Anonymizer.Tests/Fedele.Anonymizer.Tests.csproj" />
     <Project Path="tests/Fedele.Cli.Tests/Fedele.Cli.Tests.csproj" />
     <Project Path="tests/Fedele.Core.Tests/Fedele.Core.Tests.csproj" />
     <Project Path="tests/Fedele.Formats.Csv.Tests/Fedele.Formats.Csv.Tests.csproj" />
